@@ -1,0 +1,30 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  cloud:
+    function:
+      definition: productSandEvent;supply
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+          autoCreateTopics: false
+      bindings:
+        productSandEvent-in-0:
+          destination: localfood-topic
+          group: localfood-group
+        supply-out-0: # 함수에서 반환하는 값이 이 바인딩을 통해 전송됩니다.
+          destination: localfood-topic # 메시지를 발행할 Kafka 토픽
