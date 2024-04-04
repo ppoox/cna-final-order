@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Consumer;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChangeOrderStatusPolicy {
 

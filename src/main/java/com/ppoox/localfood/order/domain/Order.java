@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "od_order")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +30,7 @@ public class Order {
     private int quantity;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.COMPLETE_ORDER;
 
     @CreatedDate
     private LocalDateTime createdAt;
