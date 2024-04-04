@@ -3,6 +3,7 @@ package com.ppoox.localfood.order.domain.policy;
 import com.ppoox.localfood.order.application.port.out.persistence.OrderPersistencePort;
 import com.ppoox.localfood.order.domain.event.ProductSandEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ChangeOrderStatusPolicy {
 
     private final OrderPersistencePort orderPersistencePort;
 
-//    @Bean
+    @Bean
     public Consumer<Message<ProductSandEvent>> productSandEvent() {
         return message -> {
             System.out.println("배송준비중");

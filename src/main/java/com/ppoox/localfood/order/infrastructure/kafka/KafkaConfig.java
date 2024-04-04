@@ -1,5 +1,6 @@
 package com.ppoox.localfood.order.infrastructure.kafka;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -19,7 +20,7 @@ public class KafkaConfig {
         this.payload = payload;
     }
 
-//    @Bean
+    @Bean
     public Supplier<Message<Object>> supply() {
         return () -> {
             if (payload == null) {
@@ -39,7 +40,7 @@ public class KafkaConfig {
         };
     }
 
-//    @Bean
+    @Bean
     public Consumer<Message<String>> consume() {
         return message -> System.out.println("Received message: " + message.getPayload());
     }

@@ -18,7 +18,6 @@ spring:
       kafka:
         binder:
           brokers: localfood-kafka:9092
-          autoCreateTopics: false
       bindings:
         productSandEvent-in-0:
           destination: localfood-topic
