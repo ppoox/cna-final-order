@@ -1,11 +1,10 @@
 package com.ppoox.localfood.order.infrastructure.rest;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-@Configuration
+//@Configuration
 public class RestConfig implements RepositoryRestConfigurer {
 
     @Override

@@ -17,7 +17,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: localfood-kafka.default.svc.cluster.local:9092
+          brokers: localfood-kafka:9092
       bindings:
         productSandEvent-in-0:
           destination: localfood-topic
