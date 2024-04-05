@@ -11,6 +11,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class ChangeProductPolicy {
 
             ProductChanged payload = message.getPayload();
 
-            List<Order> orders = orderPersistencePort.findAllByStoreIdAndProductId(payload.getStoreId(), payload.getProductId())
+            List<Order> orders = orderPersistencePort.findAllByStoreIdAndProductId(payload.getId(), payload.getProductId())
                     .stream()
                     .peek(order -> order.changeOrderProductName(payload.getProductName()))
                     .collect(Collectors.toList());

@@ -40,16 +40,14 @@ public class ChangeOrderStatusPolicy {
     @Bean
     public Consumer<Message<OrderCanceled>> orderCanceledEvent() {
         return message -> {
-            System.out.println(">?????? " + message);
             MessageHeaders headers = message.getHeaders();
             if (!"order-canceled".equals(headers.get(KafkaHeaders.RECEIVED_TOPIC))) {
                 return;
             }
 
             OrderCanceled payload = message.getPayload();
-            System.out.println(payload);
+
             orderPersistencePort.findById(payload.getOrderId()).ifPresent(order -> {
-                System.out.println("????");
                 order.changeCancelOrderStatus();
                 orderPersistencePort.save(order);
             });
