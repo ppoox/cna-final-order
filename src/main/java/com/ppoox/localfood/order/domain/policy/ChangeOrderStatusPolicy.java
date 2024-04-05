@@ -1,9 +1,11 @@
 package com.ppoox.localfood.order.domain.policy;
 
 import com.ppoox.localfood.order.application.port.out.persistence.OrderPersistencePort;
-import com.ppoox.localfood.order.domain.event.ProductSandEvent;
+import com.ppoox.localfood.order.domain.event.OrderCanceled;
+import com.ppoox.localfood.order.domain.event.ProductSand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
@@ -19,20 +21,36 @@ public class ChangeOrderStatusPolicy {
     private final OrderPersistencePort orderPersistencePort;
 
     @Bean
-    public Consumer<Message<ProductSandEvent>> productSandEvent() {
+    public Consumer<Message<ProductSand>> productSandEvent() {
         return message -> {
-            System.out.println("배송준비중");
-
             MessageHeaders headers = message.getHeaders();
-            if (!headers.containsValue("ProductSandEvent")) {
+            if (!"product-sand".equals(headers.get(KafkaHeaders.RECEIVED_TOPIC))) {
                 return;
             }
 
-            ProductSandEvent payload = message.getPayload();
-
+            ProductSand payload = message.getPayload();
 
             orderPersistencePort.findById(payload.getOrderId()).ifPresent(order -> {
                 order.changeReadyProductStatus();
+                orderPersistencePort.save(order);
+            });
+        };
+    }
+
+    @Bean
+    public Consumer<Message<OrderCanceled>> orderCanceledEvent() {
+        return message -> {
+            System.out.println(">?????? " + message);
+            MessageHeaders headers = message.getHeaders();
+            if (!"order-canceled".equals(headers.get(KafkaHeaders.RECEIVED_TOPIC))) {
+                return;
+            }
+
+            OrderCanceled payload = message.getPayload();
+            System.out.println(payload);
+            orderPersistencePort.findById(payload.getOrderId()).ifPresent(order -> {
+                System.out.println("????");
+                order.changeCancelOrderStatus();
                 orderPersistencePort.save(order);
             });
         };

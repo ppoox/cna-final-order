@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
@@ -16,14 +16,20 @@ spring:
         format_sql: true
   cloud:
     function:
-      definition: productSandEvent;supply
+      definition: orderCanceledEvent;productSandEvent;productChangedEvent;ordered
     stream:
       kafka:
         binder:
           brokers: localhost:9092
       bindings:
+        orderCanceledEvent-in-0:
+          destination: order-canceled
+          group: order
         productSandEvent-in-0:
-          destination: localfood-topic
-          group: localfood-group
-        supply-out-0: # 함수에서 반환하는 값이 이 바인딩을 통해 전송됩니다.
-          destination: localfood-topic # 메시지를 발행할 Kafka 토픽
+          destination: product-sand
+          group: product
+        productChangedEvent-in-0:
+          destination: product-changed
+          group: product
+        ordered-out-0: # 함수에서 반환하는 값이 이 바인딩을 통해 전송됩니다.
+          destination: ordered # 메시지를 발행할 Kafka 토픽

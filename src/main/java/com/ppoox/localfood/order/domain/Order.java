@@ -1,8 +1,8 @@
 package com.ppoox.localfood.order.domain;
 
-import com.ppoox.localfood.order.domain.event.OrderedEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "od_order")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
@@ -27,22 +28,18 @@ public class Order {
 
     private Long productId;
 
+    private String productName;
+
     private int quantity;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.COMPLETE_ORDER;
+    private OrderStatus status;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedBy;
-
-    @PostPersist
-    public void onPostPersist() {
-        OrderedEvent orderedEvent = new OrderedEvent(this);
-        orderedEvent.publish();
-    }
 
     public void changeCompleteOrderStatus() {
         this.status = OrderStatus.COMPLETE_ORDER;
@@ -59,4 +56,13 @@ public class Order {
     public void changeCompleteDeliveryStatus() {
         this.status = OrderStatus.COMPLETE_DELIVERY;
     }
+
+    public void changeCancelOrderStatus() {
+        this.status = OrderStatus.CANCEL_ORDER;
+    }
+
+    public void changeOrderProductName(String productName) {
+        this.productName = productName;
+    }
+
 }
