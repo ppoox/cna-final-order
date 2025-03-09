@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class OrderController {
 
     private final OrderPresentationPort orderPresentationPort;
 
-    @GetMapping(path = "", produces = { "application/hal+json" })
+    @GetMapping(path = "", produces = { MediaTypes.HAL_JSON_VALUE })
     public CollectionModel<OrderModel> getOrders() {
         List<Order> orders = orderPresentationPort.getOrders();
 
@@ -35,7 +36,7 @@ public class OrderController {
         return CollectionModel.of(orderModels, link);
     }
 
-    @PostMapping(path = "", produces = { "application/hal+json" })
+    @PostMapping(path = "", produces = { MediaTypes.HAL_JSON_VALUE })
     public OrderModel createOrder(@RequestBody CreateOrderDto createOrderDto) {
         Order order = orderPresentationPort.createOrder(createOrderDto);
 
